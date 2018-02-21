@@ -46,10 +46,17 @@ class MarketData:
     # returns panel using goodle finance server, pause is required to avoid ban
     def _get_historical_prices(self, tickers, start_date, end_date):
         # pf = data.DataReader(
-            # tickers, "google", start_date, end_date, pause=10)
-        pf = pdr.get_data_google(
+        #     tickers, "google", start_date, end_date, pause=10)
+        # pf = pdr.get_data_google(
+        #     tickers, start_date, end_date, pause=10)
+        # pf.to_hdf(r'c:\temp\get_data_google.h5', 'key')
+        # pf = pdr.get_data_quandl(
+        #     tickers, start_date, end_date, pause=10)
+        pf = pdr.get_data_morningstar(
             tickers, start_date, end_date, pause=10)
+        # pf.to_hdf(r'c:\temp\get_data_morningstar.h5', 'key')
         pf = pf.astype(np.float32)
+        pf = pf.to_panel().swapaxes('major', 'minor')
         return pf
 
     # return all stocks and index in one panel
@@ -65,8 +72,9 @@ class MarketData:
             tickers,
             start_date.date(),
             end_date.date())
-        pf.loc[:, :, 'market'] = self._get_market_index(
+        market = self._get_market_index(
             start_date_str, end_date_str)
+        pf.loc[:, :, 'market'] = market
 
         if update_existing:
             new_dict = {}

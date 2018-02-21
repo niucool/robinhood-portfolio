@@ -216,5 +216,5 @@ if __name__ == "__main__":
         (df_open, 'open'),
         (df_closed, 'closed')
     ]:
-            df = df[(df.date >= dates[0]) & (df.date <= dates[1])]
-            df.to_hdf('../data/data.h5', name)
+        df = df[(df.date >= dates[0]) & (df.date <= dates[1])]
+        df.to_hdf('../data/data.h5', name)
